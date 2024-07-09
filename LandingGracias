@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gracias por tu reserva</title>
+</head>
+<body>
+    <h1>Gracias por tu reserva</h1>
+
+    <script runat="server">
+    Platform.Load("core", "1.1.5");
+
+    try {
+        Write("<br>inicio del script de servidor");
+
+        // obtener los valores del formulario
+        var nombre = Request.GetQueryStringParameter("nombre");
+        var apellidos = Request.GetQueryStringParameter("apellidos");
+        var dni = Request.GetQueryStringParameter("dni");
+        var pais = Request.GetQueryStringParameter("pais");
+        var email = Request.GetQueryStringParameter("email");
+        var telefono = Request.GetQueryStringParameter("telefono");
+        var idioma = Request.GetQueryStringParameter("idioma");
+        var moneda = Request.GetQueryStringParameter("moneda");
+        var hotel = Request.GetQueryStringParameter("hotel");
+        var entrada = Request.GetQueryStringParameter("Entrada");
+        var salida = Request.GetQueryStringParameter("Salida");
+        var numHabitaciones = Request.GetQueryStringParameter("numHabitaciones");
+        var numAcompanantes = Request.GetQueryStringParameter("numAcompanantes");
+        var totalReserva = Request.GetQueryStringParameter("totalReserva");  
+
+        Write("<br>valores del formulario obtenidos:");
+
+        Write("<br>nombre: " + nombre);
+        Write("<br>apellidos: " + apellidos);
+        Write("<br>dni: " + dni);
+        Write("<br>pais: " + pais);
+        Write("<br>email: " + email);
+        Write("<br>telefono: " + telefono);
+        Write("<br>idioma: " + idioma);
+        Write("<br>moneda: " + moneda);
+        Write("<br>hotel: " + hotel);
+        Write("<br>entrada: " + entrada);
+        Write("<br>salida: " + salida);
+        Write("<br>numHabitaciones: " + numHabitaciones);
+        Write("<br>numAcompanantes: " + numAcompanantes);
+        Write("<br>totalReserva: " + totalReserva);  // añadir esta línea
+
+        // funcion para generar ids para la reserva y el cliente
+        function generarIDConsecutivo(dataExtension, campoID) {
+        var rows = Platform.Function.LookupOrderedRows(dataExtension, 1, campoID + " DESC", campoID, "not null");
+        var ultimoID = 0;
+        
+        if (rows.length > 0) {
+            var ultimoIDStr = rows[0][campoID];
+            ultimoID = parseInt(ultimoIDStr);
+        }
+        
+        var nuevoID = ultimoID + 1;
+        return nuevoID.toString();
+       }
+      
+       // generar ids para la reserva y el cliente
+        var IdReserva = generarIDConsecutivo("DE_Reservas_01072024", "IdReserva");
+        var IdCliente = generarIDConsecutivo("DE_Clientes_28062024", "IdCliente");
+
+        Write("<br>id de reserva generado: " + IdReserva);
+        Write("<br>id de cliente generado: " + IdCliente);
+      
+      
+        // insertar datos en la tabla DE_Reservas_01072024
+        Write("<br>insertando datos en la tabla DE_Reservas_01072024...");
+        var insertResult = Platform.Function.InsertData("DE_Reservas_01072024", [
+            "IdReserva", "IdCliente", "IdHotel", "TotalReserva", "Entrada", "Salida", "NumHab", "NumAcomp"
+        ], [
+            IdReserva, IdCliente, hotel, totalReserva, entrada, salida, numHabitaciones, numAcompanantes
+        ]);
+
+        if (insertResult) {
+            Write("<br>datos insertados en DE_Reservas_01072024 con éxito.");
+        } else {
+            throw new Error("error al insertar datos en DE_Reservas_01072024.");
+        }
+
+        // autenticación para obtener el token de acceso
+        var authEndpoint = 'https://mchn8kdspj3pfr55f9x132xgkx94.auth.marketingcloudapis.com/';
+        var payload = {
+            client_id: "m2anqj259w1yu7qav9i68yvs",
+            client_secret: "7mefJ3Au6yI3Kjh2NrvuJy5s",
+            grant_type: "client_credentials"
+        };
+        var url = authEndpoint + 'v2/token';
+        var contentType = 'application/json';
+
+        Write("<br>realizando autenticación para obtener el token de acceso...");
+
+        var accessTokenRequest = HTTP.Post(url, contentType, Stringify(payload));
+        var accessToken;
+        var rest_instance_url;
+
+        if (accessTokenRequest.StatusCode == 200) {
+            var tokenResponse = Platform.Function.ParseJSON(accessTokenRequest.Response[0]);
+            accessToken = tokenResponse.access_token;
+            rest_instance_url = tokenResponse.rest_instance_url;
+
+            // depuración: mostrar el token de acceso obtenido
+            Write("<br>token de acceso obtenido: " + accessToken);
+        } else {
+            throw new Error("error al obtener el token de acceso. código de estado: " + accessTokenRequest.StatusCode);
+        }
+
+        // llamada api para desencadenar el evento de journey builder e incluir datos
+        if (email != null && accessToken != null) {
+            Write("<br>preparando llamada a la api para desencadenar el evento de journey builder...");
+
+            var headerNames = ["Authorization"];
+            var headerValues = ["Bearer " + accessToken];
+            var jsonBody = {
+                "ContactKey": email,
+                "EventDefinitionKey": "APIEvent-a99a869b-7ebc-b978-d3e3-92857deaea21",
+                "Data": {
+                    "IdCliente": IdCliente,
+                    "DNICliente": dni,
+                    "Nombre": nombre,
+                    "Apellidos": apellidos,
+                    "Email": email,
+                    "Telefono": telefono,
+                    "Idioma": idioma,
+                    "Pais": pais,
+                    "Moneda": moneda,
+                    "IdReserva": IdReserva,
+                    "Entrada": entrada,
+                    "Salida": salida,
+                    "IdHotel": hotel,
+                    "NumHab": numHabitaciones,
+                    "NumAcomp": numAcompanantes,
+                    "TotalReserva": totalReserva 
+                }
+            };
+
+            var requestUrl = rest_instance_url + "/interaction/v1/events";
+
+            Write("<br>jsonBody: " + Stringify(jsonBody));
+            Write("<br>requestUrl: " + requestUrl);
+
+            var fireEntryEvent = HTTP.Post(requestUrl, contentType, Stringify(jsonBody), headerNames, headerValues);
+
+            if (fireEntryEvent.StatusCode == 200 || fireEntryEvent.StatusCode == 201) {
+                Write("<br>evento de journey builder desencadenado con éxito.");
+            } else {
+                Write("<br>error en la llamada a la API:");
+                Write("<br>requestUrl: " + requestUrl);
+                Write("<br>jsonBody: " + Stringify(jsonBody));
+                Write("<br>statusCode: " + fireEntryEvent.StatusCode);
+                Write("<br>response: " + Stringify(fireEntryEvent));
+                throw new Error("error al desencadenar el evento de journey builder. código de estado: " + fireEntryEvent.StatusCode);
+            }
+          
+        } else {
+            throw new Error("falta el email o el token de acceso.");
+        }
+    } catch (error) {
+        Write("<br>error: " + Stringify(error));
+    }
+    </script>
+</body>
+</html>
