@@ -1,158 +1,123 @@
+    <nav class="navbar d-flex justify-content-center">
+        <ul class="d-flex justify-content-center list-unstyled gap-3">
+            <li><a href="#" class="text-decoration-none link-secondary">ES</a></li>
+            <li><a href="#" class="text-decoration-none link-secondary">EN</a></li>
+            <li><a href="#" class="text-decoration-none link-secondary">FR</a></li>
+        </ul>
+    </nav>
+    
+    <div class="card card-registration my-4">
+        <img src="https://image.s10.sfmc-content.com/lib/fe2e117170640579731374/m/1/c8b0c2f8-370a-4163-8b6a-ba7cf9a89c8d.jpg" alt="Imagen de Hoteles Moa" class="header-image">
+        <div class="card-body">
+            <h3 class="mb-5 text-uppercase text-center">Formulario de Pre-reserva</h3>
 
-<!DOCTYPE html>
-<html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <style>
-        
-        body {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            width: auto;
-            font-family: Arial, Helvetica, sans-serif;
-        }
-        .navbar {
-            display: flex;
-            justify-content: center;
-        }
-        .navbar ul {
-            list-style: none;
-            display: flex;
-        }
-        .navbar li {
-            margin-right: 10px;
-        }
-
-        .navbar a {
-            text-decoration: none;
-            color: rgb(7, 7, 52);
-        }
-        .header {
-            text-align: center;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #541c5d;
-        }
-        .container-form {
-            padding: 1rem;
-            margin: 2rem;
-        }
-
-        .input-container{
-            margin-bottom: 15px;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            margin-top: 5px;
-        }
-       
-        .btn {
-            background-color: #974ba3;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            padding: 0.5rem 1rem;
-            cursor: pointer;
-            width: 100px;
-        }
-
-        .btn:hover{
-            background-color: #9c6aa4;
-        }
-
-        .container-boton{
-            display: flex;
-            justify-content: center;
-            margin: 20px;
-        }
-
-    </style>
-    </head>
-    <body>
-        <nav class="navbar">
-            <ul>
-                <li><a href
-                        class="text-decoration-none link-secondary">ES</a></li>
-                <li><a href
-                        class="text-decoration-none link-secondary">EN</a></li>
-                <li><a href
-                        class="text-decoration-none link-secondary">FR</a></li>
-            </ul>
-        </nav>
-
-        <h1 class="header">Realiza tu reserva</h1>
-
-        <div class="container-form">
-            <form action method="POST">
-                <div class="input-container">
-                    <label for="nombre" class="form-label">Nombre:</label>
-                    <input type="text" name="nombre" class="form-control"
-                        required>
+            <!-- Los label van debajo para conseguir el efecto floating con Bootstrap-->
+            <form id="FormPreReserva" action="https://mchn8kdspj3pfr55f9x132xgkx94.pub.sfmc-content.com/c5eazdqrftz" method="POST">
+                <div class="row">
+                    <div class="col-md-6 mb-4 form-floating">
+                        <input type="text" name="nombre" class="form-control form-control-lg" id="nombre" placeholder="Nombre" required>
+                        <label class="ms-2" for="nombre">Nombre</label>
+                    </div>
+                    <div class="col-md-6 mb-4 form-floating">
+                        <input type="text" name="apellidos" class="form-control form-control-lg" id="apellidos" placeholder="Apellidos" required>
+                        <label class="ms-2" for="apellidos">Apellidos</label>
+                    </div>
                 </div>
-
-                <div class="input-container">
-                    <label for="apellidos" class="form-label">Apellidos:
-                    </label>
-                    <input type="text" name="apellidos" class="form-control"
-                        required>
+                <div class="row">
+                    <div class="col-md-6 mb-4 form-floating">
+                        <input type="text" name="dni" class="form-control form-control-lg" id="dni" placeholder="DNI/NIE/Pasaporte" required>
+                        <label class="ms-2" for="dni">DNI/NIE/Pasaporte</label>
+                    </div>
+                    <div class="col-md-6 mb-4 form-floating">
+                        <input type="text" name="pais" class="form-control form-control-lg" id="pais" placeholder="País" required>
+                        <label class="ms-2" for="pais">País</label>
+                    </div>
                 </div>
-
-                <div class="input-container">
-                    <label for="dni" class="form-label">DNI/NIE/Pasaporte:
-                    </label>
-                    <input type="text" name="dni" class="form-control" required>
+                <div class="form-floating mb-4">
+                    <input type="email" name="email" class="form-control form-control-lg" id="email" placeholder="Email" required>
+                    <label class="ms-2" for="email">Email</label>
                 </div>
-
-                <div class="input-container">
-                    <label for="pais" class="form-label">País: </label>
-                    <input type="text" name="pais" class="form-control"
-                        required>
+                <div class="form-floating mb-4">
+                    <input type="tel" name="telefono" class="form-control form-control-lg" id="telefono" placeholder="Teléfono" required>
+                    <label class="ms-2" for="telefono">Teléfono</label>
                 </div>
-
-                <div class="input-container">
-                    <label for="email" class="form-label">Email: </label>
-                    <input type="email" name="email" class="form-control"
-                        required>
-                </div>
-
-                <div class="input-container">
-                    <label for="telefono" class="form-label">Teléfono: </label>
-                    <input type="text" name="telefono" class="form-control"
-                        required>
-                </div>
-
-                <div class="input-container">
-                    <label for="idioma" class="form-label">Idioma:</label>
-                    <select name="idioma" class="form-control" required>
-                        <option value>Selecciona tu idioma</option>
+                <div class="form-floating mb-4">
+                    <select name="idioma" class="form-control form-control-lg" id="idioma" required>
+                        <option value="">Selecciona tu idioma</option>
                         <option value="ES">Español</option>
-                        <option value="EN">English</option>
-                        <option value="FR">Français</option>
+                        <option value="EN">Inglés</option>
+                        <option value="FR">Francés</option>
                     </select>
+                    <label class="ms-2" for="idioma">Idioma</label>
                 </div>
-                <div class="input-container">
-                    <label for="moneda" class="form-label">Moneda:</label>
-                    <select name="moneda" class="form-control" required>
-                        <option value>Selecciona tu moneda</option>
-                        <option value="ES">EUR</option>
-                        <option value="EN">DOLLAR(US)</option>
-                        <option value="FR">GBP</option>
+                <div class="form-floating mb-4">
+                    <select name="moneda" class="form-control form-control-lg" id="moneda" required onchange="actualizarTotalReserva()">
+                        <option value="">Selecciona tu moneda</option>
+                        <option value="EUR">EUR</option>
+                        <option value="USD">USD</option>
+                        <option value="GBP">GBP</option>
                     </select>
+                    <label class="ms-2" for="moneda">Moneda</label>
                 </div>
-                <h4 class="header header-h4">Detalles de la reserva</h4>
-
-                <div class="input-container">
-                    <label for="hotel" class="form-label">Elige tu hotel</label>
+                <div class="form-header">
+                    <h4 class="header-h4">Detalles de la reserva</h4>
                 </div>
-              
-                <div class="container-boton">
-                    <button type="submit" class="btn">Enviar</button>
+                <div class="form-floating mb-4">
+                    <select name="hotel" class="form-control form-control-lg" id="hotel" required onchange="actualizarTotalReserva()">
+                        <option value="">Selecciona tu hotel</option>
+                        %%[
+                        var @rows, @row, @rowCount, @i, @NombreHotel, @IdHotel, @PrecioHab
+                        set @rows = LookupRows("DE_Hoteles_28062024", "Activo", "true")
+                        set @rowCount = RowCount(@rows)
+                        if @rowCount > 0 then
+                            for @i = 1 to @rowCount do
+                                set @row = Row(@rows, @i)
+                                set @NombreHotel = Field(@row, "NombreHotel")
+                                set @IdHotel = Field(@row, "IdHotel")
+                                set @PrecioHab = Field(@row, "PrecioHab")
+                        ]%%
+                        <option value="%%=v(@IdHotel)=%%" data-precio="%%=v(@PrecioHab)=%%">%%=v(@NombreHotel)=%%</option>
+                        %%[
+                            next @i
+                        else
+                        ]%%
+                        <option value="">Ahora mismo no disponemos de hoteles</option>
+                        %%[
+                        endif
+                        ]%%
+                    </select>
+                    <label class="ms-2" for="hotel">Elige tu hotel</label>
+                </div>
+                <div class="form-floating mb-4">
+                    <input type="date" name="Entrada" class="form-control form-control-lg" id="Entrada" placeholder="Indica tu Fecha de Entrada" required>
+                    <label class="ms-2" for="Entrada">Indica tu Fecha de Entrada</label>
+                </div>
+                <div class="form-floating mb-4">
+                    <input type="date" name="Salida" class="form-control form-control-lg" id="Salida" placeholder="Indica tu Fecha de Salida" required>
+                    <label class="ms-2" for="Salida">Indica tu Fecha de Salida</label>
+                </div>
+                <div class="form-floating mb-4">
+                    <select name="numHabitaciones" class="form-control form-control-lg" id="numHabitaciones" required onchange="actualizarTotalReserva()">
+                        <option value="">Elige habitaciones a reservar</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                    <label class="ms-2" for="numHabitaciones">Número de Habitaciones</label>
+                </div>
+                <div class="form-floating mb-4">
+                    <input type="number" name="numAcompanantes" class="form-control form-control-lg" id="numAcompanantes" placeholder="Número de Acompañantes" min="0" required>
+                    <label class="ms-2" for="numAcompanantes">Número de Acompañantes</label>
+                </div>
+                <input type="hidden" name="isSubmitted" value="true">
+                <input type="hidden" name="totalReserva" id="totalReserva" value="0" />
+                <div class="form-header">
+                    <h4 class="header-h4">Total reserva</h4>
+                    <p><span id="totalReservaText">0</span> <span id="monedaSeleccionada"></span></p>
+                </div>
+                <div class="d-flex justify-content-end pt-3">
+                    <button type="submit" class="btn btn-violet btn-lg ms-2">Enviar</button>
+                </div>
             </form>
         </div>
-    </body>
-</html>
+    </div>
